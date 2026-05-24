@@ -1,0 +1,19 @@
+{
+  "name": "wardrobe-mvp-app",
+  "version": "1.0.0",
+  "description": "Digital Wardrobe MVP Web App - Personal outfit curator and gallery with local storage and client-side canvas compression.",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx http-server -o"
+  },
+  "keywords": [
+    "wardrobe",
+    "mvp",
+    "gallery",
+    "vanilla-js",
+    "local-storage"
+  ],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {}
+}

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wardrobe — Personal Digital Outfit Curator</title>
+  <meta name="description" content="A minimalist digital wardrobe gallery to curate, upload, and organize your favorite outfits.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header>
+    <div class="header-container">
+      <div class="logo" id="logo-btn" style="cursor: pointer;">
+        <!-- Lucide Hanger Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 20h20"/>
+          <path d="M20 20a8 8 0 0 0-16 0"/>
+          <path d="M12 20V10"/>
+          <path d="M12 10a4 4 0 1 1 8-3.3"/>
+        </svg>
+        Wardrobe <span>MVP</span>
+      </div>
+      <nav class="nav-tabs">
+        <button class="tab-btn active" id="tab-gallery" aria-label="View Wardrobe Gallery">
+          <!-- Lucide Grid Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="7" x="3" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="14" rx="1"/>
+            <rect width="7" height="7" x="3" y="14" rx="1"/>
+          </svg>
+          Gallery
+        </button>
+        <button class="tab-btn" id="tab-upload" aria-label="Create New Outfit">
+          <!-- Lucide Plus Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/>
+            <path d="M12 5v14"/>
+          </svg>
+          Add Outfit
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN VIEWS
+       ========================================================================== -->
+  <main>
+    
+    <!-- 1. GALLERY VIEW SECTION (HOME) -->
+    <section id="gallery-view" class="view-section active">
+      
+      <!-- Apple-style Collections row -->
+      <div class="collections-container">
+        <div class="collections-header">
+          <h2>Collections</h2>
+          <button class="add-collection-btn" id="add-collection-btn" aria-label="Create New Collection">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="M12 5v14"/>
+            </svg>
+            New Collection
+          </button>
+        </div>
+        <div class="collections-carousel" id="collections-carousel">
+          <!-- Rendered dynamically (folder stacks) -->
+        </div>
+      </div>
+
+      <div class="gallery-header">
+        <div class="gallery-title">
+          <h1>My Wardrobe</h1>
+          <p>Curating your signature styles and daily looks.</p>
+        </div>
+        <span class="gallery-count" id="outfit-count-badge">0 outfits</span>
+      </div>
+
+      <!-- Windows Photos-style Layout & Grid Controls -->
+      <div class="layout-toolbar">
+        <div class="toolbar-group">
+          <span class="toolbar-label">Layout:</span>
+          <button class="toolbar-btn active" id="layout-btn-river" title="Horizontal scrolling flow">
+            <!-- Staggered Flow SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="6" height="9" x="3" y="3" rx="1"/>
+              <rect width="6" height="5" x="15" y="3" rx="1"/>
+              <rect width="6" height="9" x="15" y="12" rx="1"/>
+              <rect width="6" height="5" x="3" y="16" rx="1"/>
+            </svg>
+            River
+          </button>
+          <button class="toolbar-btn" id="layout-btn-square" title="Uniform Square Grid">
+            <!-- Grid SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+            </svg>
+            Square
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <span class="toolbar-label">Size:</span>
+          <div class="size-selector-pills">
+            <button class="size-pill" id="size-btn-small" data-size="small">Small</button>
+            <button class="size-pill active" id="size-btn-medium" data-size="medium">Medium</button>
+            <button class="size-pill" id="size-btn-large" data-size="large">Large</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter status bar for Active Collection -->
+      <div class="filter-bar" id="filter-bar">
+        <span class="filter-badge">
+          Viewing: <strong id="filter-collection-name">Collection</strong>
+        </span>
+        <button class="clear-filter-btn" id="clear-filter-btn">Show All Outfits</button>
+      </div>
+
+      <!-- Outfits Grid/Masonry Container -->
+      <div class="gallery-grid layout-river size-medium" id="gallery-grid">
+        <!-- Rendered dynamically in app.js -->
+      </div>
+    </section>
+
+    <!-- 2. UPLOAD VIEW SECTION (MULTI-PART BUILDER) -->
+    <section id="upload-view" class="view-section">
+      <div class="upload-container">
+        <div class="upload-title">
+          <h1>Curate Outfit</h1>
+          <p>Name your look and add the separate clothing pieces that complete the outfit.</p>
+        </div>
+
+        <div class="upload-card">
+          <!-- Outfit name input -->
+          <div class="outfit-name-wrapper">
+            <label for="outfit-name-input">Outfit Title</label>
+            <input type="text" id="outfit-name-input" placeholder="e.g., Casual Denim Style, Autumn Date Night" maxlength="50" autocomplete="off">
+          </div>
+
+          <!-- Draft Pieces Showcase list -->
+          <div class="draft-items-section" id="draft-items-section">
+            <h3>Outfit Pieces</h3>
+            <div class="draft-items-grid" id="draft-items-grid">
+              <!-- Rendered dynamically as they get added -->
+            </div>
+          </div>
+
+          <!-- Add Piece Builder Interface -->
+          <div class="piece-builder-container">
+            <h3>Add a Clothing Piece</h3>
+            <div class="piece-builder-row">
+              <div class="category-select-wrapper">
+                <label for="part-category-select">Piece Type</label>
+                <select id="part-category-select">
+                  <option value="Top">👕 Top / Shirt</option>
+                  <option value="Bottom">👖 Bottom / Pants</option>
+                  <option value="Footwear">👟 Footwear / Shoes</option>
+                  <option value="Headwear">🧢 Headwear / Hat</option>
+                  <option value="Accessory">🧣 Accessory / Bag / Scarf</option>
+                  <option value="Other">✨ Other Piece</option>
+                </select>
+              </div>
+
+              <!-- Mini Dropzone picker -->
+              <div class="dropzone" id="dropzone" aria-label="Image drag and drop area">
+                <!-- Default Content -->
+                <div class="dropzone-content" id="dropzone-default">
+                  <div class="dropzone-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                      <path d="M12 12v9"/>
+                      <path d="m8 16 4-4 4 4"/>
+                    </svg>
+                  </div>
+                  <p>Drop piece image, or <strong>browse</strong></p>
+                </div>
+
+                <!-- Preview Container -->
+                <div class="preview-container" id="preview-container">
+                  <img id="image-preview" src="" alt="Clothing Piece Preview">
+                  <button type="button" class="remove-preview-btn" id="remove-preview-btn" title="Remove image">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Hidden Input -->
+                <input type="file" id="file-input" class="file-input" accept="image/png, image/jpeg, image/webp" aria-label="Piece photo upload input">
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary" id="add-piece-draft-btn" disabled>
+              Add Piece to Outfit
+            </button>
+          </div>
+
+          <!-- Overall Form Action Buttons -->
+          <div class="form-actions">
+            <button class="btn btn-secondary" id="cancel-upload-btn">Cancel</button>
+            <button class="btn btn-primary" id="save-outfit-btn" disabled>
+              <div class="loader-spinner" id="btn-spinner"></div>
+              <span id="btn-text">Save Complete Outfit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. DETAIL VIEW SECTION (INNER SCREEN) -->
+    <section id="detail-view" class="view-section">
+      <div class="detail-header-bar">
+        <button class="back-link-btn" id="detail-back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to Wardrobe
+        </button>
+      </div>
+
+      <div class="detail-showcase-container">
+        <!-- Sidebar controls -->
+        <aside class="detail-sidebar">
+          <div class="detail-title-group">
+            <h1 class="detail-outfit-title" id="detail-outfit-title">Outfit Title</h1>
+            <p class="detail-outfit-date" id="detail-outfit-date">Uploaded May 24, 2026</p>
+          </div>
+
+          <div class="detail-collections-manager">
+            <h3>Collections</h3>
+            <div class="detail-collections-list" id="detail-collections-list">
+              <!-- collections badges loaded dynamically -->
+            </div>
+            
+            <button class="add-to-coll-btn" id="detail-manage-coll-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14"/><path d="M12 5v14"/>
+              </svg>
+              Manage Collections
+            </button>
+          </div>
+
+          <button class="btn btn-danger-action" id="detail-delete-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            </svg>
+            Delete Complete Outfit
+          </button>
+        </aside>
+
+        <!-- Main items layout grid -->
+        <div class="detail-main-content">
+          <h3>Outfit Pieces</h3>
+          <div class="detail-items-grid" id="detail-items-grid">
+            <!-- Dynamic piece cards render here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAL DIALOG DICTIONARY
+       ========================================================================== -->
+
+  <!-- A. CREATE COLLECTION MODAL -->
+  <div class="modal-overlay" id="collection-modal">
+    <div class="modal-card">
+      <h2>Create Custom Collection</h2>
+      <p>Group your curated outfits by style, season, or occasion.</p>
+      
+      <div class="modal-input-wrapper">
+        <label for="new-collection-name">Collection Title</label>
+        <input type="text" id="new-collection-name" placeholder="e.g., Casual Weekend, Summer Faves, Office Looks" maxlength="25" autocomplete="off">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="modal-save-btn" disabled>Create Collection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. MANAGE COLLECTIONS MEMBERSHIP DIALOG -->
+  <div class="modal-overlay" id="manage-collections-modal">
+    <div class="modal-card">
+      <h2>Manage Outfit Collections</h2>
+      <p>Assign this outfit to one or more of your custom collections:</p>
+      
+      <div class="checkbox-list" id="collections-checkbox-list">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="manage-coll-close-btn" style="flex: 1;">Save & Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. FULLSCREEN LIGHTBOX SCROLLER OVERLAY -->
+  <div class="lightbox-overlay" id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Fullscreen slideshow view">
+    <!-- Close icon -->
+    <button class="lightbox-close-btn" id="lightbox-close-btn" title="Close Fullscreen View">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Nav left -->
+    <button class="lightbox-arrow lightbox-arrow-left" id="lightbox-arrow-left" title="Previous Outfit">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+
+    <!-- Visual showcase content box -->
+    <div class="lightbox-content-box" id="lightbox-content-box">
+      <img id="lightbox-image" src="" alt="Fullscreen image rendering">
+      <div class="lightbox-caption">
+        <h2 id="lightbox-title">Outfit Title</h2>
+        <span id="lightbox-counter">Outfit 1 of 1</span>
+      </div>
+    </div>
+
+    <!-- Nav right -->
+    <button class="lightbox-arrow lightbox-arrow-right" id="lightbox-arrow-right" title="Next Outfit">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       DYNAMIC FEEDBACK NOTIFICATIONS (TOASTS)
+       ========================================================================== -->
+  <div class="toast" id="toast-notification" role="alert" aria-live="polite">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 <span>Wardrobe</span>. Curated with precision.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
